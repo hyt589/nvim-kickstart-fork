@@ -68,7 +68,7 @@ fork to your machine using one of the commands below, depending on your OS.
 <details><summary> Linux and Mac </summary>
 
 ```sh
-git clone https://github.com/dam9000/kickstart-modular.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+git clone https://github.com/hyt589/nvim-kickstart-fork.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
 ```
 
 </details>
@@ -78,13 +78,13 @@ git clone https://github.com/dam9000/kickstart-modular.nvim.git "${XDG_CONFIG_HO
 If you're using `cmd.exe`:
 
 ```
-git clone https://github.com/dam9000/kickstart-modular.nvim.git %userprofile%\AppData\Local\nvim\
+git clone https://github.com/hyt589/nvim-kickstart-fork.git %userprofile%\AppData\Local\nvim\
 ```
 
 If you're using `powershell.exe`
 
 ```
-git clone https://github.com/dam9000/kickstart-modular.nvim.git $env:USERPROFILE\AppData\Local\nvim\
+git clone https://github.com/hyt589/nvim-kickstart-fork.git $env:USERPROFILE\AppData\Local\nvim\
 ```
 
 </details>
@@ -95,6 +95,12 @@ Start Neovim
 
 ```sh
 nvim
+```
+
+Or if you want everything installed in a Dockerfile
+
+```bash
+RUN nvim --headless +'Lazy! sync' +qa
 ```
 
 That's it! Lazy will install all the plugins you have. Use `:Lazy` to view
