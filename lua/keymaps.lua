@@ -33,6 +33,10 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', 'Q', '<cmd>q<cr>', { desc = 'Close window' })
+vim.keymap.set('n', '<leader>wv', '<cmd>vsplit<cr>', { desc = '[W]indow [V]ertical split' })
+vim.keymap.set('n', '<leader>wh', '<cmd>split<cr>', { desc = '[W]indow [H]orizontal split' })
+vim.keymap.set('n', '<leader>wq', '<cmd>q<cr>', { desc = '[W]indow [Q]uit' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -47,5 +51,31 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+-- switch buffers
+vim.keymap.set('n', '<leader>bs', '<cmd>bprev<cr>', {})
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<cr>', {})
+
+-- save buffers
+vim.keymap.set('n', '<C-s>', '<cmd>wa<cr>', {})
+
+vim.keymap.set('n', '<leader>d', '"_d', { desc = 'delete without yanking' })
+vim.keymap.set('v', '<leader>d', '"_d', { desc = 'delete without yanking' })
+
+-- replace currently selected text with default register
+-- without yanking it
+vim.keymap.set('v', '<leader>p', '"_dp', { desc = 'delete without yanking' })
+
+vim.keymap.set('n', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
+vim.keymap.set('v', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
+
+vim.keymap.set('n', 'j', 'gj', { desc = 'Move thru wrapped line' })
+vim.keymap.set('n', 'k', 'gk', { desc = 'Move thru wrapped line' })
+
+vim.keymap.set('v', 'j', 'gj', { desc = 'Move thru wrapped line' })
+vim.keymap.set('v', 'k', 'gk', { desc = 'Move thru wrapped line' })
+
+vim.keymap.set('n', '<c-_>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
+vim.keymap.set('v', '<c-_>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
 
 -- vim: ts=2 sts=2 sw=2 et
