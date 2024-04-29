@@ -106,6 +106,14 @@ return {
           { name = 'luasnip' },
           { name = 'path' },
         },
+        formatting = {
+          format = function(_, vim_item)
+            vim_item.menu = ''
+            return vim_item
+          end,
+          fields = { 'abbr', 'kind', 'menu' },
+          expandable_indicator = true,
+        },
       }
     end,
   },

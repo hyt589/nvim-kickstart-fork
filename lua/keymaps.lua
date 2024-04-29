@@ -77,5 +77,7 @@ vim.keymap.set('v', 'k', 'gk', { desc = 'Move thru wrapped line' })
 
 vim.keymap.set('n', '<c-_>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
 vim.keymap.set('v', '<c-_>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
+vim.keymap.set('n', '<c-/>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
+vim.keymap.set('v', '<c-/>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
 
 -- vim: ts=2 sts=2 sw=2 et
