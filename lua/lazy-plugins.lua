@@ -70,6 +70,7 @@ require('lazy').setup({
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
 
+  { 'MunifTanjim/nui.nvim' },
   require 'custom.plugins.nvim_window',
   require 'custom.plugins.dashboard',
   require 'custom.plugins.bufferline',
@@ -79,8 +80,7 @@ require('lazy').setup({
   require 'custom.plugins.auto_session',
   require 'custom.plugins.telescope_file_browser',
   require 'custom.plugins.toggleterm',
-
-  { 'MunifTanjim/nui.nvim' },
+  require 'custom.plugins.dressing',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
