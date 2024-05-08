@@ -81,6 +81,9 @@ require('lazy').setup({
   require 'custom.plugins.telescope_file_browser',
   require 'custom.plugins.toggleterm',
   require 'custom.plugins.dressing',
+  require 'custom.plugins.barbecue',
+  require 'custom.plugins.ibl',
+  require 'custom.plugins.mini_indent_line',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
