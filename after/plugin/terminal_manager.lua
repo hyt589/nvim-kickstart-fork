@@ -1,5 +1,5 @@
 local Terminal = require('toggleterm.terminal').Terminal
-local default_term = Terminal:new { hidden = true, direction = 'float' }
+local default_term = Terminal:new { cmd = 'bash', hidden = true, direction = 'float' }
 
 local terminal_list = {
   default = default_term,
