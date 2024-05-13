@@ -33,7 +33,7 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-vim.keymap.set('n', 'Q', '<cmd>q<cr>', { desc = 'Close window' })
+vim.keymap.set('n', 'Q', '<cmd>qa<cr>', { desc = 'Close all windows' })
 vim.keymap.set('n', '<leader>wv', '<cmd>vsplit<cr>', { desc = '[W]indow [V]ertical split' })
 vim.keymap.set('n', '<leader>wh', '<cmd>split<cr>', { desc = '[W]indow [H]orizontal split' })
 vim.keymap.set('n', '<leader>wq', '<cmd>q<cr>', { desc = '[W]indow [Q]uit' })
@@ -53,11 +53,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- switch buffers
-vim.keymap.set('n', '<leader>bs', '<cmd>bprev<cr>', {})
+vim.keymap.set('n', '<leader>bs', '<c-^>', {})
+vim.keymap.set('n', '<leader>bc', '<cmd>BufferLineCloseOthers<cr>', {})
 vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<cr>', {})
 
 -- save buffers
 vim.keymap.set('n', '<C-s>', '<cmd>wa<cr>', {})
+vim.keymap.set('n', '<C-S>', '<cmd>wa!<cr>', {})
 
 vim.keymap.set('n', '<leader>d', '"_d', { desc = 'delete without yanking' })
 vim.keymap.set('v', '<leader>d', '"_d', { desc = 'delete without yanking' })

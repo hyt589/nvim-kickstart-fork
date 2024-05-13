@@ -73,13 +73,26 @@ local _terminal_remover = function(opts)
     :find()
 end
 
+local _compute_name = function(table, basename, postfix_base)
+  local name = string.format('%s (%s)', basename, postfix_base)
+  local cnt = 0
+  while table[name] ~= nil do
+    name = string.format('%s (%s %d)', basename, postfix_base, cnt)
+    cnt = cnt + 1
+  end
+  return name
+end
+
 local _create_terminal = function()
   local command = vim.fn.input { prompt = 'Command: ', cancelreturn = '', completion = 'shellcmd' }
   if string.len(command) == 0 then
     return
   end
-  if current_terminal[command] then
-    current_terminal = terminal_list[command]
+  if terminal_list[command] ~= nil then
+    local terminal_name = _compute_name(terminal_list, command, 'copy')
+    print(terminal_name)
+    terminal_list[terminal_name] = Terminal:new { cmd = command, hidden = true, direction = 'float' }
+    current_terminal = terminal_list[terminal_name]
     _toggle_current_terminal()
     return
   end
