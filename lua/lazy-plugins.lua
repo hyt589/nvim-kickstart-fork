@@ -61,7 +61,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -78,7 +78,7 @@ require('lazy').setup({
   require 'custom.plugins.neoscroll',
   require 'custom.plugins.project',
   require 'custom.plugins.auto_session',
-  require 'custom.plugins.telescope_file_browser',
+  -- require 'custom.plugins.telescope_file_browser',
   require 'custom.plugins.toggleterm',
   require 'custom.plugins.dressing',
   require 'custom.plugins.barbecue',
