@@ -84,21 +84,23 @@ local _compute_name = function(table, basename, postfix_base)
 end
 
 local _create_terminal = function()
-  local command = vim.fn.input { prompt = 'Command: ', cancelreturn = '', completion = 'shellcmd' }
-  if string.len(command) == 0 then
-    return
-  end
-  if terminal_list[command] ~= nil then
-    local terminal_name = _compute_name(terminal_list, command, 'copy')
-    print(terminal_name)
-    terminal_list[terminal_name] = Terminal:new { cmd = command, hidden = true, direction = 'float' }
-    current_terminal = terminal_list[terminal_name]
+  vim.ui.input({ prompt = 'Command: ', default = '', completion = 'shellcmd' }, function(input)
+    local command = input
+    if command == nil or string.len(command) == 0 then
+      return
+    end
+    if terminal_list[command] ~= nil then
+      local terminal_name = _compute_name(terminal_list, command, 'copy')
+      print(terminal_name)
+      terminal_list[terminal_name] = Terminal:new { cmd = command, hidden = true, direction = 'float' }
+      current_terminal = terminal_list[terminal_name]
+      _toggle_current_terminal()
+      return
+    end
+    terminal_list[command] = Terminal:new { cmd = command, hidden = true, direction = 'float' }
+    current_terminal = terminal_list[command]
     _toggle_current_terminal()
-    return
-  end
-  terminal_list[command] = Terminal:new { cmd = command, hidden = true, direction = 'float' }
-  current_terminal = terminal_list[command]
-  _toggle_current_terminal()
+  end)
 end
 
 vim.api.nvim_create_user_command('FindTerminals', _terminal_finder, {})

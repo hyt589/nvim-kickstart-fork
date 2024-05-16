@@ -85,6 +85,8 @@ require('lazy').setup({
   require 'custom.plugins.ibl',
   require 'custom.plugins.mini_indent_line',
   require 'custom.plugins.lualine',
+  require 'custom.plugins.noice',
+  require 'custom.plugins.marks',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the

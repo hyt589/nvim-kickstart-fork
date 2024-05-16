@@ -52,10 +52,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- switch buffers
-vim.keymap.set('n', '<leader>bs', '<c-^>', {})
-vim.keymap.set('n', '<leader>bc', '<cmd>BufferLineCloseOthers<cr>', {})
-vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<cr>', {})
+-- buffers
+vim.keymap.set('n', '<leader>bs', '<c-^>', { desc = '[B]uffer [S]wap' })
+vim.keymap.set('n', '<leader>bc', '<cmd>BufferLineCloseOthers<cr>', { desc = '[B]uffer [C]lose others' })
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<cr>', { desc = '[B]uffer [D]elete' })
+vim.keymap.set('n', '<c-h>', '<cmd>BufferLineCyclePrev<cr>', { desc = '[B]uffer [N]ext' })
+vim.keymap.set('n', '<c-l>', '<cmd>BufferLineCycleNext<cr>', { desc = '[B]uffer [P]rev' })
+vim.keymap.set('n', '\\b', '<cmd>BufferLinePick<cr>', { desc = 'Pick buffers' })
 
 -- save buffers
 vim.keymap.set('n', '<C-s>', '<cmd>wa<cr>', {})
@@ -71,15 +74,17 @@ vim.keymap.set('v', '<leader>p', '"_dp', { desc = 'delete without yanking' })
 vim.keymap.set('n', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
 vim.keymap.set('v', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
 
-vim.keymap.set('n', 'j', 'gj', { desc = 'Move thru wrapped line' })
-vim.keymap.set('n', 'k', 'gk', { desc = 'Move thru wrapped line' })
+vim.keymap.set('n', 'j', 'gj', { desc = 'Move thru wrapped line', silent = true })
+vim.keymap.set('n', 'k', 'gk', { desc = 'Move thru wrapped line', silent = true })
 
-vim.keymap.set('v', 'j', 'gj', { desc = 'Move thru wrapped line' })
-vim.keymap.set('v', 'k', 'gk', { desc = 'Move thru wrapped line' })
+vim.keymap.set('v', 'j', 'gj', { desc = 'Move thru wrapped line', silent = true })
+vim.keymap.set('v', 'k', 'gk', { desc = 'Move thru wrapped line', silent = true })
 
 vim.keymap.set('n', '<c-_>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
 vim.keymap.set('v', '<c-_>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
 vim.keymap.set('n', '<c-/>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
 vim.keymap.set('v', '<c-/>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
+
+vim.keymap.set('n', '<leader>f,', '<cmd>TodoTelescope<cr>', { desc = '[F]ind todo comments in project' })
 
 -- vim: ts=2 sts=2 sw=2 et
