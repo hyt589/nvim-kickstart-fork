@@ -71,7 +71,7 @@ vim.keymap.set('v', '<leader>d', '"_d', { desc = 'delete without yanking' })
 -- without yanking it
 vim.keymap.set('v', '<leader>p', '"_dp', { desc = 'delete without yanking' })
 
-vim.keymap.set('n', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
+vim.keymap.set('n', '<leader><leader>', '<cmd>HopWordMW<cr>', { desc = 'Hop word' })
 vim.keymap.set('v', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
 
 vim.keymap.set('n', 'j', 'gj', { desc = 'Move thru wrapped line', silent = true })

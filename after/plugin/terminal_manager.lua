@@ -1,5 +1,5 @@
 local Terminal = require('toggleterm.terminal').Terminal
-local default_term = Terminal:new { hidden = true, direction = 'float' }
+local default_term = Terminal:new { hidden = true, direction = 'float', display_name = 'Default Terminal' }
 
 local terminal_list = {
   default = default_term,
@@ -90,14 +90,13 @@ local _create_terminal = function()
       return
     end
     if terminal_list[command] ~= nil then
-      local terminal_name = _compute_name(terminal_list, command, 'copy')
-      print(terminal_name)
-      terminal_list[terminal_name] = Terminal:new { cmd = command, hidden = true, direction = 'float' }
+      local terminal_name = _compute_name(terminal_list, command, 'duplicate')
+      terminal_list[terminal_name] = Terminal:new { cmd = command, hidden = true, direction = 'float', display_name = terminal_name }
       current_terminal = terminal_list[terminal_name]
       _toggle_current_terminal()
       return
     end
-    terminal_list[command] = Terminal:new { cmd = command, hidden = true, direction = 'float' }
+    terminal_list[command] = Terminal:new { cmd = command, hidden = true, direction = 'float', display_name = command }
     current_terminal = terminal_list[command]
     _toggle_current_terminal()
   end)
