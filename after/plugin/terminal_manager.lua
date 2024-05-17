@@ -111,3 +111,13 @@ vim.keymap.set('n', '\\t', _toggle_current_terminal, { desc = 'Toggle terminal' 
 vim.keymap.set('n', '<leader>ct', _create_terminal, { desc = 'Create a terminal' })
 vim.keymap.set('n', '<leader>ft', _terminal_finder, { desc = 'Find a terminal' })
 vim.keymap.set('n', '<leader>dt', _terminal_remover, { desc = 'Delete terminal' })
+
+vim.api.nvim_create_autocmd({ 'DirChanged' }, {
+  pattern = '*',
+  callback = function()
+    for name, term in pairs(terminal_list) do
+      term.dir = vim.fn.getcwd()
+      print('Terminal ' .. name .. ' change dir to ' .. vim.fn.getcwd())
+    end
+  end,
+})
