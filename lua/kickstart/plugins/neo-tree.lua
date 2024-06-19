@@ -1,6 +1,10 @@
 -- Neo-tree is a Neovim plugin to browse the file system
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
 
+local function toggle_neotree()
+  vim.cmd 'Neotree dir=./ reveal'
+end
+
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
@@ -11,7 +15,7 @@ return {
   },
   cmd = 'Neotree',
   keys = {
-    { '\\f', ':Neotree dir=./ reveal<CR>', { desc = 'NeoTree reveal' } },
+    { '\\f', toggle_neotree, { desc = 'NeoTree reveal' } },
   },
   opts = {
     filesystem = {
