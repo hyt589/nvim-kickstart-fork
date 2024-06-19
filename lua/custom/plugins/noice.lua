@@ -1,3 +1,13 @@
+local function redirect_message(pattern, view)
+  return {
+    filter = {
+      event = 'msg_show',
+      find = pattern,
+    },
+    view = view,
+  }
+end
+
 return {
   -- lazy.nvim
   {
@@ -38,6 +48,26 @@ return {
         },
         messages = {
           enabled = true,
+          view = 'mini',
+          view_error = 'mini',
+          view_warn = 'mini',
+        },
+        routes = {
+          {
+            filter = {
+              event = 'msg_history_show',
+            },
+            view = 'popup',
+          },
+          {
+            filter = {
+              event = 'msg_show',
+              min_height = 10,
+            },
+            view = 'popup',
+          },
+          redirect_message('✓', 'popup'),
+          redirect_message('✗', 'popup'),
         },
       }
     end,

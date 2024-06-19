@@ -107,6 +107,7 @@ vim.api.nvim_create_user_command('RemoveTerminal', _terminal_remover, {})
 vim.api.nvim_create_user_command('CreateTerminal', _create_terminal, {})
 
 vim.keymap.set('n', '\\t', _toggle_current_terminal, { desc = 'Toggle terminal' })
+vim.keymap.set('t', '\\t', _toggle_current_terminal, { desc = 'Toggle terminal' })
 vim.keymap.set('n', '<leader>ct', _create_terminal, { desc = 'Create a terminal' })
 vim.keymap.set('n', '<leader>ft', _terminal_finder, { desc = 'Find a terminal' })
 vim.keymap.set('n', '<leader>dt', _terminal_remover, { desc = 'Delete terminal' })
