@@ -64,4 +64,5 @@ vim.opt.tabstop = 4
 
 vim.opt.termguicolors = true
 
+vim.opt.wrap = false
 -- vim: ts=2 sts=2 sw=2 et
