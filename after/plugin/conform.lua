@@ -21,3 +21,11 @@ local function _format_buffer()
 end
 
 vim.keymap.set('', '<c-f>', _format_buffer, { desc = '[F]ormat buffer' })
+
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  pattern = 'xmake.lua',
+  callback = function()
+    print 'Disabling auto format for this xmake file'
+    vim.b[vim.fn.bufnr()].disable_autoformat = true
+  end,
+})

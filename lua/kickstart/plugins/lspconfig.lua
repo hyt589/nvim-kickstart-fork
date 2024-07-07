@@ -1,3 +1,19 @@
+local function luals_addons()
+  local luals_addons_dir = vim.fn.stdpath 'data' .. '/luals_addons'
+  if not vim.uv.fs_stat(luals_addons_dir) then
+    print('creating directory: ' .. luals_addons_dir)
+    vim.uv.fs_mkdir(luals_addons_dir, tonumber('755', 8))
+  end
+  local xmake_addon_dir = luals_addons_dir .. '/xmake'
+  local xmake_addon_repo = 'https://github.com/LelouchHe/xmake-luals-addon.git'
+  if not vim.uv.fs_stat(xmake_addon_dir) then
+    print 'pulling xmake luals addon'
+    vim.fn.system { 'git', 'clone', '--branch=publish', xmake_addon_repo, xmake_addon_dir }
+  end
+  local xmake_library_dir = xmake_addon_dir .. '/library'
+  return luals_addons_dir, xmake_library_dir
+end
+
 return {
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -155,6 +171,8 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+      local luals_addons_dir, xmake_library_dir = luals_addons()
       local servers = {
         clangd = {
           cmd = {
@@ -185,6 +203,10 @@ return {
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               -- diagnostics = { disable = { 'missing-fields' } },
+              workspace = {
+                userThirdParty = { luals_addons_dir },
+                library = { xmake_library_dir },
+              },
             },
           },
         },
