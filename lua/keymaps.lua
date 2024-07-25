@@ -65,25 +65,25 @@ vim.keymap.set('n', '<C-s>', '<cmd>wa<cr>', {})
 vim.keymap.set('n', '<C-S>', '<cmd>wa!<cr>', {})
 
 vim.keymap.set('n', '<leader>d', '"_d', { desc = 'delete without yanking' })
-vim.keymap.set('v', '<leader>d', '"_d', { desc = 'delete without yanking' })
+vim.keymap.set('x', '<leader>d', '"_d', { desc = 'delete without yanking' })
 
 -- replace currently selected text with default register
 -- without yanking it
-vim.keymap.set('v', '<leader>p', '"_dp', { desc = 'delete without yanking' })
+vim.keymap.set('x', '<leader>p', '"_dp', { desc = 'delete without yanking' })
 
 vim.keymap.set('n', '<leader><leader>', '<cmd>HopWordMW<cr>', { desc = 'Hop word' })
-vim.keymap.set('v', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
+vim.keymap.set('x', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
 
 vim.keymap.set('n', 'j', 'gj', { desc = 'Move thru wrapped line', silent = true })
 vim.keymap.set('n', 'k', 'gk', { desc = 'Move thru wrapped line', silent = true })
 
-vim.keymap.set('v', 'j', 'gj', { desc = 'Move thru wrapped line', silent = true })
-vim.keymap.set('v', 'k', 'gk', { desc = 'Move thru wrapped line', silent = true })
+vim.keymap.set('x', 'j', 'gj', { desc = 'Move thru wrapped line', silent = true })
+vim.keymap.set('x', 'k', 'gk', { desc = 'Move thru wrapped line', silent = true })
 
 vim.keymap.set('n', '<c-_>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
-vim.keymap.set('v', '<c-_>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
+vim.keymap.set('x', '<c-_>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
 vim.keymap.set('n', '<c-/>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
-vim.keymap.set('v', '<c-/>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
+vim.keymap.set('x', '<c-/>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
 
 vim.keymap.set('n', '<leader>f,', '<cmd>TodoTelescope<cr>', { desc = '[F]ind todo comments in project' })
 
