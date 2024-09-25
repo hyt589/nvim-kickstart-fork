@@ -69,7 +69,7 @@ vim.keymap.set('x', '<leader>d', '"_d', { desc = 'delete without yanking' })
 
 -- replace currently selected text with default register
 -- without yanking it
-vim.keymap.set('x', '<leader>p', '"_dp', { desc = 'delete without yanking' })
+vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'paste without yanking' })
 
 vim.keymap.set('n', '<leader><leader>', '<cmd>HopWordMW<cr>', { desc = 'Hop word' })
 vim.keymap.set('x', '<leader><leader>', '<cmd>HopWord<cr>', { desc = 'Hop word' })
@@ -86,5 +86,21 @@ vim.keymap.set('n', '<c-/>', '<Plug>(comment_toggle_linewise_current)', { desc =
 vim.keymap.set('x', '<c-/>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
 
 vim.keymap.set('n', '<leader>f,', '<cmd>TodoTelescope<cr>', { desc = '[F]ind todo comments in project' })
+
+vim.keymap.set('n', '\\f', function()
+  require('common.file_explorer').open_file_exporer()
+end, { desc = 'Open file explorer' })
+
+vim.keymap.set('n', '\\o', function()
+  require('oil').open_float()
+end, { desc = 'Open file explorer' })
+
+vim.keymap.set('n', '<leader>ge', function()
+  vim.diagnostic.goto_next()
+end, { desc = 'Jump to next diagnostic' })
+
+vim.keymap.set('n', '<leader>Gn', function()
+  vim.diagnostic.goto_prev()
+end, { desc = 'Jump to previous diagnostic' })
 
 -- vim: ts=2 sts=2 sw=2 et

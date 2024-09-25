@@ -1,12 +1,14 @@
 local function remove_all_swap_files()
   -- Get the directory where Neovim stores swap files
-  local swap_dir = vim.fn.stdpath 'data' .. '/swap/'
+  -- local swap_dir = vim.fn.stdpath 'data' .. '/swap/'
+  local swap_dir = vim.o.directory
 
   -- Get a list of all files in the swap directory
   local swap_files = vim.fn.globpath(swap_dir, '*', false, 1)
 
   -- Loop through the swap files and delete them
   for _, file in ipairs(swap_files) do
+    print('removing ' .. file)
     os.remove(file)
   end
 

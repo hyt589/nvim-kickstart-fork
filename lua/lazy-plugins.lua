@@ -61,7 +61,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.neo-tree',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -89,6 +89,11 @@ require('lazy').setup({
   require 'custom.plugins.marks',
   require 'custom.plugins.floating_help',
   require 'custom.plugins.catppuccin',
+  require 'custom.plugins.oil',
+  require 'custom.plugins.ranger',
+  require 'custom.plugins.outline',
+  require 'custom.plugins.llm.llm',
+  require 'custom.plugins.trouble',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
