@@ -103,4 +103,7 @@ vim.keymap.set('n', '<leader>Gn', function()
   vim.diagnostic.goto_prev()
 end, { desc = 'Jump to previous diagnostic' })
 
+vim.keymap.set('n', '<leader>wm', function()
+  vim.cmd 'Maximize'
+end, { desc = '[W]indow [M]aximize' })
 -- vim: ts=2 sts=2 sw=2 et

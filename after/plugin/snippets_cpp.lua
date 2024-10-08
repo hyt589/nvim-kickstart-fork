@@ -40,6 +40,28 @@ local snippets = {
     i(3, 'addr'),
     t ';',
   }),
+  s(
+    'if',
+    fmta(
+      [[
+  if (<>) {
+    <>
+  }
+  ]],
+      { i(1, 'condition'), i(2) }
+    )
+  ),
+  s(
+    'foreach',
+    fmta(
+      [[
+      for(<> : <>) {
+        <>
+      }
+      ]],
+      { i(1, 'item'), i(2, 'container'), i(3) }
+    )
+  ),
 }
 
 ls.add_snippets('cpp', snippets)

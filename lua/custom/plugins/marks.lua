@@ -29,6 +29,7 @@ return {
         -- sign/virttext. Bookmarks can be used to group together positions and quickly move
         -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
         -- default virt_text is "".
+        signs = false,
         bookmark_0 = {
           sign = '⚑',
           virt_text = 'hello world',

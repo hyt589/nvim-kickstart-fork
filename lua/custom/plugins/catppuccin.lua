@@ -22,18 +22,18 @@ return {
         },
         color_overrides = {
           mocha = {
-            base = '#000000',
+            -- base = '#000000',
             -- mantle = '#000000',
             -- crust = '#000000',
           },
         },
-        highlight_overrides = {
-          all = function(colors)
-            return {
-              CursorLine = { bg = colors.none },
-            }
-          end,
-        },
+        -- highlight_overrides = {
+        --   all = function(colors)
+        --     return {
+        --       CursorLine = { bg = colors.none },
+        --     }
+        --   end,
+        -- },
         integrations = {
           treesitter = true,
           native_lsp = {
