@@ -36,8 +36,12 @@ local function create_baseline_cmake_project(project_path)
 
   local cmake_preset_src = cmake_templates_dir .. slash .. 'cmake_presets_baseline.json'
   local cmake_preset_dst = project_path .. slash .. 'CMakePresets.json'
-  log_trace 'Createing CMakePresets.json'
+  log_trace 'Creating CMakePresets.json'
   utils.copy_file(cmake_preset_src, cmake_preset_dst)
+
+  local cmake_module_dir = project_path .. slash .. 'cmake'
+  log_trace 'Creating ./cmake directory'
+  utils.mkdir(cmake_module_dir)
 
   local src_dir = project_path .. slash .. 'src'
   log_trace 'Creating ./src directory'
@@ -53,6 +57,8 @@ local function create_baseline_cmake_project(project_path)
   log_trace 'Creating ./src/main.cpp'
   utils.copy_file(hello_world_src, hello_world_dst)
 end
+
+local function create_vcpkg_project(project_path) end
 
 local ProjectTypes = {
   CMakeSimple = {
