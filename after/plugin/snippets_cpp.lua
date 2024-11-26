@@ -62,6 +62,27 @@ local snippets = {
       { i(1, 'item'), i(2, 'container'), i(3) }
     )
   ),
+  s(
+    'coutv',
+    fmt(
+      [[
+  std::cout << "{}: " << {} << std::endl;
+  ]],
+      { f(function(args, parent, user_args)
+        return args[1][1]
+      end, { 1 }, {}), i(1, 'value') }
+    )
+  ),
+  s(
+    'coutl',
+    fmt(
+      [[
+  std::cout << "{}" << std::endl;
+  ]],
+      { i(1, 'line') }
+    )
+  ),
+  s('coutdb', fmt('std::cout << __FILE__ << ":" << __LINE__ << std::endl;', {}))
 }
 
 ls.add_snippets('cpp', snippets)

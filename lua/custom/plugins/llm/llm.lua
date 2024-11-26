@@ -23,7 +23,7 @@ return {
       suffix = '<fim_suffix>',
     },
     debounce_ms = 150,
-    accept_keymap = '<Tab>',
+    accept_keymap = '<M-i>',
     dismiss_keymap = '<S-Tab>',
     tls_skip_verify_insecure = false,
     -- llm-ls configuration, cf llm-ls section
@@ -32,7 +32,7 @@ return {
       host = nil,
       port = nil,
       cmd_env = nil, -- or { LLM_LOG_LEVEL = "DEBUG" } to set the log level of llm-ls
-      version = '0.5.3',
+      version = '0.5.2',
     },
     tokenizer = nil, -- cf Tokenizer paragraph
     context_window = 1024, -- max number of tokens for the context window
