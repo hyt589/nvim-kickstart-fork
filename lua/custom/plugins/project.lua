@@ -1,30 +1,10 @@
 local os = require 'common.os'
 
-local config = {}
-
-if os.is_windows then -- pattern matching on windows is broken
-  config = {
-    require('telescope').load_extension 'projects',
-    vim.keymap.set('n', '<leader>ps', function()
-      require('telescope').extensions.projects.projects {}
-    end, { desc = '[P]roject [S]earch' }),
-  }
-else
-  config = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-    detection_methods = { 'pattern' },
-
-    -- All the patterns used to detect root dir, when **"pattern"** is in
-    -- detection_methods
-    patterns = { '!../git', 'compile_commands.json', 'build/compile_commands.json', '^.config/nvim' },
-
-    require('telescope').load_extension 'projects',
-    vim.keymap.set('n', '<leader>ps', function()
-      require('telescope').extensions.projects.projects {}
-    end, { desc = '[P]roject [S]earch' }),
-  }
+local function load_telescope_extension()
+  if not os.is_windows then -- telescope extension is broken on windows
+    return require('telescope').load_extension 'projects'
+  end
+  return nil
 end
 
 return {
@@ -34,7 +14,21 @@ return {
       'nvim-telescope/telescope.nvim',
     },
     config = function()
-      require('project_nvim').setup(config)
+      require('project_nvim').setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+        detection_methods = { 'pattern' },
+
+        -- All the patterns used to detect root dir, when **"pattern"** is in
+        -- detection_methods
+        patterns = { '!../git', 'compile_commands.json', 'build/compile_commands.json', '^.config/nvim' },
+
+        load_telescope_extension(),
+        vim.keymap.set('n', '<leader>ps', function()
+          require('telescope').extensions.projects.projects {}
+        end, { desc = '[P]roject [S]earch' }),
+      }
     end,
   },
 }
