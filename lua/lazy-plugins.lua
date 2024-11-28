@@ -96,6 +96,7 @@ require('lazy').setup({
   require 'custom.plugins.trouble',
   require 'custom.plugins.maximize',
   require 'custom.plugins.github_colorscheme',
+  require 'custom.plugins.helpview',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
