@@ -58,7 +58,24 @@ local function create_baseline_cmake_project(project_path)
   utils.copy_file(hello_world_src, hello_world_dst)
 end
 
-local function create_vcpkg_project(project_path) end
+local function create_vcpkg_project(project_path)
+  create_baseline_cmake_project(project_path)
+
+  local config_dir = vim.fn.stdpath 'config'
+  local resource_dir = config_dir .. slash .. 'resources'
+  local cmake_templates_dir = resource_dir .. slash .. 'cmake_templates'
+  local cmake_module_dir = project_path .. slash .. 'cmake'
+
+  local module_vcpkg_src = cmake_templates_dir .. slash .. 'module_vcpkg.cmake'
+  local module_vcpkg_dst = cmake_module_dir .. slash .. 'vcpkg.toolchain.cmake'
+  log_trace 'Creating ./cmake/vcpkg.toolchain.cmake'
+  utils.copy_file(module_vcpkg_src, module_vcpkg_dst)
+
+  local cmakelist_src = cmake_templates_dir .. slash .. 'root_vcpkg.cmake'
+  local cmakelist_dst = project_path .. slash .. 'CMakeLists.txt'
+  log_trace 'Adding vcpkg config to top level CMakeLists.txt'
+  utils.copy_file(cmakelist_src, cmakelist_dst)
+end
 
 local ProjectTypes = {
   CMakeSimple = {
@@ -71,7 +88,8 @@ local ProjectTypes = {
   CMakeVcpkg = {
     name = 'CMake with Vcpkg',
     initializer = function(project_path)
-      log_info 'Unimplmented'
+      create_vcpkg_project(project_path)
+      log_info 'done'
     end,
   },
   CMakeCPM = {
