@@ -75,6 +75,11 @@ local function create_vcpkg_project(project_path)
   local cmakelist_dst = project_path .. slash .. 'CMakeLists.txt'
   log_trace 'Adding vcpkg config to top level CMakeLists.txt'
   utils.copy_file(cmakelist_src, cmakelist_dst)
+
+  local cmake_preset_src = cmake_templates_dir .. slash .. 'cmake_presets_vcpkg.json'
+  local cmake_preset_dst = project_path .. slash .. 'CMakePresets.json'
+  log_trace 'Overriding default CMakePresets.json with vcpkg options'
+  utils.copy_file(cmake_preset_src, cmake_preset_dst)
 end
 
 local ProjectTypes = {

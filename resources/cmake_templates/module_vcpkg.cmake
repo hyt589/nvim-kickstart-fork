@@ -17,9 +17,14 @@ elseif(NOT DEFINED _WRAPPER_VCPKG_INCLUDE)
   message(STATUS "vcpkg not found on system, installing as build dependency")
   include(FetchContent)
   set(FETCHCONTENT_QUIET FALSE)
+  set(_actual_tag master)
+  if(DEFINED VCPKG_TAG)
+    set(_actual_tag ${VCPKG_TAG})
+  endif()
   FetchContent_Declare(
     vcpkg
     GIT_REPOSITORY "https://github.com/microsoft/vcpkg.git"
+    GIT_TAG ${_actual_tag}
     GIT_SHALLOW 1
     GIT_PROGRESS TRUE)
 
@@ -56,6 +61,33 @@ elseif(NOT DEFINED _WRAPPER_VCPKG_INCLUDE)
   # include toolchain file
   message(STATUS "setting toolchain file to vcpkg.cmake")
   set(CMAKE_TOOLCHAIN_FILE ${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake)
+
+  set($ENV{VCPKG_ROOT} ${vcpkg_SOURCE_DIR}) # note: this only affect this CMake
+                                            # run, not the invoking process
+
+  # TODO: handle non bash cases; remove if vcpkg fix this bug. bash/zsh
+  # completion does not work as of 2025.1, the following script does work for
+  # bash
+  # cmake-format: off
+  string(CONCAT _env_script_content
+      "export VCPKG_ROOT=${vcpkg_SOURCE_DIR}\n"
+      "export PATH=${CMAKE_BINARY_DIR}:\$PATH\n" 
+      "_vcpkg_completions()\n" "
+      {\n"
+      "  local vcpkg_executable=\${COMP_WORDS[0]}\n" 
+      "  local remaining_command_line=\${COMP_LINE:(\${#vcpkg_executable}+1)}\n"
+      "  COMPREPLY=(\$(\${vcpkg_executable} autocomplete \"\${remaining_command_line}\"))\n"
+      "  local cur\n"
+      "  _get_comp_words_by_ref -n : cur\n"
+      "  __ltrim_colon_completions \"\$cur\"\n"
+      "}\n"
+      "complete -F _vcpkg_completions vcpkg")
+  # cmake-format: on
+  set(_vcpkg_env_script_path "${CMAKE_BINARY_DIR}/_vcpkg_env.sh")
+  file(WRITE ${_vcpkg_env_script_path} "${_env_script_content}")
+  message(
+    STATUS "To use vcpkg from the command line, run the following command: ")
+  message(STATUS "\n    source ${_vcpkg_env_script_path}\n")
 
 endif()
 

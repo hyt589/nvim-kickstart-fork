@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.20)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
+set(VCPKG_TAG
+    2025.01.13 # TODO: select a VCPKG_TAG from
+               # https://github.com/microsoft/vcpkg.git
+    CACHE STRING "vcpkg github tag")
+
 include(vcpkg.toolchain)
 
 # TODO: Change project name

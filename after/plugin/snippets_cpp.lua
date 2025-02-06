@@ -82,7 +82,33 @@ local snippets = {
       { i(1, 'line') }
     )
   ),
-  s('coutdb', fmt('std::cout << __FILE__ << ":" << __LINE__ << std::endl;', {}))
+  s('coutdb', fmt('std::cout << __FILE__ << ":" << __LINE__ << std::endl;', {})),
+  s(
+    'ifcons',
+    fmta(
+      [[
+  if constexpr(<>){
+    <>
+  }
+  ]],
+      { i(1, 'condition'), i(2, 'stmts;') }
+    )
+  ),
+  s(
+    'ifconsl',
+    fmta(
+      [[
+  if constexpr(<>){ <> }
+  ]],
+      { i(1, 'condition'), i(2, 'stmts;') }
+    )
+  ),
+  s(
+    'pv',
+    fmta([[printf("<>: %<>\n", <>)]], { f(function(args, _, _)
+      return args[1][1]
+    end, { 1 }, {}), i(2, 'd'), i(1, 'value') })
+  ),
 }
 
 ls.add_snippets('cpp', snippets)
