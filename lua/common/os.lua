@@ -16,9 +16,9 @@ local detect_os_type = function()
   end
 end
 
-local is_windows = vim.fn.has 'win32' or vim.fn.has 'win64'
-local is_mac = vim.fn.has 'mac'
-local is_linux = vim.fn.has 'linux'
+local is_windows = detect_os_type() == os_types.Windows
+local is_mac = detect_os_type() == os_types.Mac
+local is_linux = detect_os_type() == os_types.Linux
 
 return {
   OS = os_types,
