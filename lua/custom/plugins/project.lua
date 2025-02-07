@@ -7,6 +7,14 @@ local function load_telescope_extension()
   return nil
 end
 
+local function methods()
+  if not os.is_windows then
+    return { 'pattern' }
+  else
+    return { 'lsp' }
+  end
+end
+
 return {
   {
     'ahmedkhalf/project.nvim',
@@ -18,7 +26,7 @@ return {
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
-        detection_methods = { 'pattern' },
+        detection_methods = methods(),
 
         -- All the patterns used to detect root dir, when **"pattern"** is in
         -- detection_methods

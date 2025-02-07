@@ -78,7 +78,7 @@ require('lazy').setup({
   require 'custom.plugins.neoscroll',
   require 'custom.plugins.project',
   require 'custom.plugins.auto_session',
-  -- require 'custom.plugins.telescope_file_browser',
+  require 'custom.plugins.telescope_file_browser',
   require 'custom.plugins.toggleterm',
   require 'custom.plugins.dressing',
   require 'custom.plugins.barbecue',

@@ -102,9 +102,24 @@ local _create_terminal = function()
   end)
 end
 
+--- @class command
+--- @field args? string
+--- @field fargs? string[]
+--- @field nargs number
+
+--- @param command command
+local _create_terminal_with_commands = function(command)
+  local command_str = command.args
+  local key = command.fargs[1]
+  terminal_list[key] = Terminal:new { cmd = command_str, hidden = true, direction = 'float', display_name = key, close_on_exit = false }
+  current_terminal = terminal_list[key]
+  _toggle_current_terminal()
+end
+
 vim.api.nvim_create_user_command('FindTerminals', _terminal_finder, {})
 vim.api.nvim_create_user_command('RemoveTerminal', _terminal_remover, {})
 vim.api.nvim_create_user_command('CreateTerminal', _create_terminal, {})
+vim.api.nvim_create_user_command('CreateTerminalWithCommands', _create_terminal_with_commands, { nargs = '*' })
 
 vim.keymap.set('n', '\\t', _toggle_current_terminal, { desc = 'Toggle terminal' })
 vim.keymap.set('t', '\\t', _toggle_current_terminal, { desc = 'Toggle terminal' })
