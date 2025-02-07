@@ -49,17 +49,19 @@ local function prompt_local_config(ignore_cache)
   if vim.fn.filereadable(project_config) == 1 and should_prompt then
     local choices = { 'yes', 'no', 'show content' }
     local opts = { prompt = 'Local configurations detected, load them?' }
-    vim.ui.select(choices, opts, function(choice)
-      if choice == 'yes' then
-        dofile(project_config)
-        choice_table[project_config] = true
-      elseif choice == 'show content' then
-        vim.cmd('e ' .. project_config)
-        choice_table[project_config] = false
-      else
-        choice_table[project_config] = false
-      end
-      cache_current_choice(choice_table)
+    require('common.utils').run_after_user_event('VeryLazy', function()
+      vim.ui.select(choices, opts, function(choice)
+        if choice == 'yes' then
+          dofile(project_config)
+          choice_table[project_config] = true
+        elseif choice == 'show content' then
+          vim.cmd('e ' .. project_config)
+          choice_table[project_config] = false
+        else
+          choice_table[project_config] = false
+        end
+        cache_current_choice(choice_table)
+      end)
     end)
   end
 end
@@ -81,7 +83,9 @@ vim.api.nvim_create_user_command('CheckProjectConfig', function()
   if vim.fn.filereadable(project_config) == 0 then
     local choices = { 'ok' }
     local opts = { prompt = 'No project config files found' }
-    vim.ui.select(choices, opts, function() end)
+    require('common.utils').run_after_user_event('VeryLazy', function()
+      vim.ui.select(choices, opts, function() end)
+    end)
   else
     prompt_local_config(true)
   end

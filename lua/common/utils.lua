@@ -58,6 +58,14 @@ local function log_error(msg)
   vim.notify(msg, vim.log.levels.ERROR)
 end
 
+local function run_after_user_event(pattern, callback)
+  vim.api.nvim_create_autocmd('User', {
+    pattern = pattern,
+    callback = callback,
+    once = true,
+  })
+end
+
 local M = {
   copy_file = copy_file,
   file_exists = file_exists,
@@ -66,6 +74,7 @@ local M = {
   log_trace = log_trace,
   log_info = log_info,
   log_error = log_error,
+  run_after_user_event = run_after_user_event,
 }
 
 return M

@@ -2,11 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
-set(VCPKG_TAG
-    2025.01.13 # TODO: select a VCPKG_TAG from
-               # https://github.com/microsoft/vcpkg.git
-    CACHE STRING "vcpkg github tag")
-
+# this file sets the CMAKE_TOOLCHAIN_FILE to the vcpkg one. it should be
+# included instead of being set as CMAKE_TOOLCHAIN_FILE to avoid redownloading
+# vcpkg when cmake performs toolchain checks
 include(vcpkg.toolchain)
 
 # TODO: Change project name
@@ -28,7 +26,10 @@ foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
       ${CMAKE_BINARY_DIR}/lib/${CONFIG})
 endforeach()
 
-set(${PROJECT_NAME}_PUBLIC_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include)
+add_library(${PROJECT_NAME}_interface INTERFACE)
+target_include_directories(
+  ${PROJECT_NAME}_interface
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 
 vcpkg_create_manifest(
   NAME

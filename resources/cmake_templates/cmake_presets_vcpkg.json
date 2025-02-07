@@ -9,8 +9,7 @@
 			"generator": "Ninja Multi-Config",
 			"cacheVariables": {
 				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/vcpkg.toolchain.cmake",
-				"VCPKG_TAG": "2025.1.13"
+				"VCPKG_TAG": "2025.01.13"
 			}
 		}
 	],

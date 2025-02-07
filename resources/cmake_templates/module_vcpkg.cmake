@@ -65,35 +65,25 @@ elseif(NOT DEFINED _WRAPPER_VCPKG_INCLUDE)
   set($ENV{VCPKG_ROOT} ${vcpkg_SOURCE_DIR}) # note: this only affect this CMake
                                             # run, not the invoking process
 
-  # TODO: handle non bash cases; remove if vcpkg fix this bug. bash/zsh
-  # completion does not work as of 2025.1, the following script does work for
-  # bash
-  # cmake-format: off
-  string(CONCAT _env_script_content
-      "export VCPKG_ROOT=${vcpkg_SOURCE_DIR}\n"
-      "export PATH=${CMAKE_BINARY_DIR}:\$PATH\n" 
-      "_vcpkg_completions()\n" "
-      {\n"
-      "  local vcpkg_executable=\${COMP_WORDS[0]}\n" 
-      "  local remaining_command_line=\${COMP_LINE:(\${#vcpkg_executable}+1)}\n"
-      "  COMPREPLY=(\$(\${vcpkg_executable} autocomplete \"\${remaining_command_line}\"))\n"
-      "  local cur\n"
-      "  _get_comp_words_by_ref -n : cur\n"
-      "  __ltrim_colon_completions \"\$cur\"\n"
-      "}\n"
-      "complete -F _vcpkg_completions vcpkg")
-  # cmake-format: on
-  set(_vcpkg_env_script_path "${CMAKE_BINARY_DIR}/_vcpkg_env.sh")
-  file(WRITE ${_vcpkg_env_script_path} "${_env_script_content}")
+  configure_file(${CMAKE_CURRENT_LIST_DIR}/vcpkg_completion.bash.in
+                 ${CMAKE_BINARY_DIR}/_vcpkg_env.bash @ONLY)
+  configure_file(${CMAKE_CURRENT_LIST_DIR}/vcpkg_completion.zsh.in
+                 ${CMAKE_BINARY_DIR}/_vcpkg_env.zsh @ONLY)
   message(
-    STATUS "To use vcpkg from the command line, run the following command: ")
-  message(STATUS "\n    source ${_vcpkg_env_script_path}\n")
+    STATUS
+      "To use vcpkg from the command line, run the following command corresponding to your shell: "
+  )
+  message(STATUS "\n    source ${CMAKE_BINARY_DIR}/_vcpkg_env.bash\n")
+  message(STATUS "\n    source ${CMAKE_BINARY_DIR}/_vcpkg_env.zsh\n")
 
 endif()
 
 function(vcpkg_create_manifest)
   if(VCPKG_MANIFEST_CREATED)
     message(STATUS "Found existing vcpkg manifest")
+    execute_process(
+      COMMAND ${VCPKG_PATH} install
+      WORKING_DIRECTORY ${VCPKG_MANIFEST_DIR} COMMAND_ERROR_IS_FATAL ANY)
     return()
   endif(VCPKG_MANIFEST_CREATED)
 
@@ -108,6 +98,9 @@ function(vcpkg_create_manifest)
     set(VCPKG_MANIFEST_DIR
         ${MANIFEST_DIR}
         CACHE STRING "manifest dir" FORCE)
+    execute_process(
+      COMMAND ${VCPKG_PATH} install
+      WORKING_DIRECTORY ${MANIFEST_DIR} COMMAND_ERROR_IS_FATAL ANY)
     return()
   endif(EXISTS "${MANIFEST_DIR}/vcpkg.json")
 
@@ -120,6 +113,8 @@ function(vcpkg_create_manifest)
     WORKING_DIRECTORY "${MANIFEST_DIR}")
   execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${VCPKG_PATH}
                           ${CMAKE_BINARY_DIR}/vcpkg)
+  execute_process(COMMAND ${VCPKG_PATH} install
+                  WORKING_DIRECTORY ${MANIFEST_DIR} COMMAND_ERROR_IS_FATAL ANY)
   set(VCPKG_MANIFEST_CREATED
       true
       CACHE BOOL "whether vcpkg is found" FORCE)

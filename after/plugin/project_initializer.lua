@@ -3,7 +3,7 @@
 local os = require 'common.os'
 local utils = require 'common.utils'
 
-local slash = os.os_type() == os.OS.Windows and '\\' or '/'
+local slash = os.is_windows and '\\' or '/'
 local log_trace = utils.log_trace
 local log_info = utils.log_info
 local log_error = utils.log_error
@@ -56,6 +56,9 @@ local function create_baseline_cmake_project(project_path)
   local hello_world_dst = src_dir .. slash .. 'main.cpp'
   log_trace 'Creating ./src/main.cpp'
   utils.copy_file(hello_world_src, hello_world_dst)
+
+  vim.api.nvim_command('edit ' .. cmakelist_dst)
+  log_info 'Remember to change your project name!'
 end
 
 local function create_vcpkg_project(project_path)
@@ -80,6 +83,19 @@ local function create_vcpkg_project(project_path)
   local cmake_preset_dst = project_path .. slash .. 'CMakePresets.json'
   log_trace 'Overriding default CMakePresets.json with vcpkg options'
   utils.copy_file(cmake_preset_src, cmake_preset_dst)
+
+  local vcpkg_completion_bash_src = cmake_templates_dir .. slash .. 'vcpkg_completion.bash.in'
+  local vcpkg_completion_bash_dst = cmake_module_dir .. slash .. 'vcpkg_completion.bash.in'
+  log_trace 'Adding vcpkg bash completion template'
+  utils.copy_file(vcpkg_completion_bash_src, vcpkg_completion_bash_dst)
+
+  local vcpkg_completion_zsh_src = cmake_templates_dir .. slash .. 'vcpkg_completion.zsh.in'
+  local vcpkg_completion_zsh_dst = cmake_module_dir .. slash .. 'vcpkg_completion.zsh.in'
+  log_trace 'Adding vcpkg zsh completion template'
+  utils.copy_file(vcpkg_completion_zsh_src, vcpkg_completion_zsh_dst)
+
+  vim.api.nvim_command('edit ' .. cmakelist_dst)
+  log_info 'Remember to change your project name!'
 end
 
 local ProjectTypes = {
@@ -113,7 +129,7 @@ local function table_values(t)
   return result
 end
 
-local function bootstrap()
+local function project_wizard()
   vim.ui.select(table_values(ProjectTypes), {
     prompt = 'Select a project type',
     format_item = function(item)
@@ -121,6 +137,10 @@ local function bootstrap()
     end,
   }, function(choice)
     prompt_for_parent_path(function(parent_path)
+      if parent_path == nil then
+        log_error 'nil parent path'
+        return
+      end
       if not is_directory(parent_path) then
         log_error(parent_path .. ' is not a directory')
         return
@@ -135,9 +155,18 @@ local function bootstrap()
         vim.fn.chdir(project_path)
       end)
     end)
-    -- return choice.initializer()
   end)
 end
 
-vim.api.nvim_create_user_command('ProjectInit', bootstrap, {})
-vim.keymap.set('n', '<leader>pg', bootstrap, { desc = 'Generate a new project' })
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'VeryLazy',
+  callback = function()
+    vim.api.nvim_create_user_command('ProjectInit', project_wizard, {})
+    vim.keymap.set('n', '<leader>pg', project_wizard, { desc = 'Generate a new project' })
+  end,
+})
+
+vim.api.nvim_create_user_command('CreateProject', function()
+  utils.run_after_user_event('VeryLazy', project_wizard)
+  vim.api.nvim_del_user_command 'CreateProject'
+end, {})

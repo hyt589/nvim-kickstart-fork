@@ -21,6 +21,9 @@ foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
       ${CMAKE_BINARY_DIR}/lib/${CONFIG})
 endforeach()
 
-set(${PROJECT_NAME}_PUBLIC_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include)
+add_library(${PROJECT_NAME}_interface INTERFACE)
+target_include_directories(
+  ${PROJECT_NAME}_interface
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
 
 add_subdirectory(src)

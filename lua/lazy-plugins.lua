@@ -92,7 +92,7 @@ require('lazy').setup({
   require 'custom.plugins.oil',
   require 'custom.plugins.ranger',
   require 'custom.plugins.outline',
-  require 'custom.plugins.llm.llm',
+  -- require 'custom.plugins.llm.llm', -- this is bugged TODO: replace with minuet
   require 'custom.plugins.trouble',
   require 'custom.plugins.maximize',
   require 'custom.plugins.github_colorscheme',
