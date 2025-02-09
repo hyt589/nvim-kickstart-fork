@@ -8,7 +8,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(vcpkg.toolchain)
 
 # TODO: Change project name
-project(projectname VERSION 1.0)
+project(slang-test VERSION 1.0)
 
 # Set output directories for all targets
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin) # Executables
@@ -30,16 +30,5 @@ add_library(${PROJECT_NAME}_interface INTERFACE)
 target_include_directories(
   ${PROJECT_NAME}_interface
   INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>)
-
-vcpkg_create_manifest(
-  NAME
-  ${PROJECT_NAME} # Name of your project
-  VERSION
-  ${CMAKE_PROJECT_VERSION} # Version of your project
-  DIR
-  ${CMAKE_CURRENT_LIST_DIR} # Directory in which to create the manifest file
-  INSTALL_DIR
-  ${CMAKE_CURRENT_BINARY_DIR}/vcpkg_installed) # Where packages will be
-                                               # installed
 
 add_subdirectory(src)

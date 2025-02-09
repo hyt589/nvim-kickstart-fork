@@ -1,3 +1,29 @@
+function(create_manifest_file_if_not_found)
+  if(EXISTS "${CMAKE_SOURCE_DIR}/vcpkg.json")
+    message(STATUS "Manifest file already created")
+    set(VCPKG_MANIFEST_DIR
+        ${CMAKE_SOURCE_DIR}
+        CACHE STRING "manifest dir" FORCE)
+    return()
+  endif()
+
+  message(STATUS "Creating vcpkg.json")
+  if(DEFINED ENV{PACKAGE_NAME} AND DEFINED ENV{PACKAGE_VERSION})
+    execute_process(
+      COMMAND "${VCPKG_PATH}" "new" "--name" "$ENV{PACKAGE_NAME}" "--version" "$ENV{PACKAGE_VERSION}" 
+      WORKING_DIRECTORY "${MANIFEST_DIR}" COMMAND_ERROR_IS_FATAL ANY)
+  else()
+    execute_process(
+      COMMAND "${VCPKG_PATH}" "new" "--application"
+      WORKING_DIRECTORY "${MANIFEST_DIR}" COMMAND_ERROR_IS_FATAL ANY)
+  endif()
+  execute_process(
+    COMMAND "${VCPKG_PATH}" "x-update-baseline" "--add-initial-baseline"
+    WORKING_DIRECTORY "${MANIFEST_DIR}")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${VCPKG_PATH}
+                          ${CMAKE_BINARY_DIR}/vcpkg)
+endfunction()
+
 if(DEFINED EXPORT_SDK_PATH
    AND EXISTS ${EXPORT_SDK_PATH}/scripts/buildsystems/vcpkg.cmake)
   message(STATUS "using an exported vcpkg sdk from ${EXPORT_SDK_PATH}")
@@ -5,12 +31,13 @@ if(DEFINED EXPORT_SDK_PATH
 
 elseif(EXISTS $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
   message(STATUS "using vcpkg installed in $ENV{VCPKG_ROOT}")
-  set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
   if(WIN32)
     set(VCPKG_PATH $ENV{VCPKG_ROOT}/vcpkg.exe)
   else()
     set(VCPKG_PATH $ENV{VCPKG_ROOT}/vcpkg)
   endif()
+  create_manifest_file_if_not_found()
+  set(CMAKE_TOOLCHAIN_FILE $ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 
 elseif(NOT DEFINED _WRAPPER_VCPKG_INCLUDE)
   set(_WRAPPER_VCPKG_INCLUDE "vcpkg included") # include guard
@@ -58,6 +85,7 @@ elseif(NOT DEFINED _WRAPPER_VCPKG_INCLUDE)
   endif()
   message(STATUS "Bootstrapped vcpkg")
 
+  create_manifest_file_if_not_found()
   # include toolchain file
   message(STATUS "setting toolchain file to vcpkg.cmake")
   set(CMAKE_TOOLCHAIN_FILE ${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake)
@@ -77,48 +105,3 @@ elseif(NOT DEFINED _WRAPPER_VCPKG_INCLUDE)
   message(STATUS "\n    source ${CMAKE_BINARY_DIR}/_vcpkg_env.zsh\n")
 
 endif()
-
-function(vcpkg_create_manifest)
-  if(VCPKG_MANIFEST_CREATED)
-    message(STATUS "Found existing vcpkg manifest")
-    execute_process(
-      COMMAND ${VCPKG_PATH} install
-      WORKING_DIRECTORY ${VCPKG_MANIFEST_DIR} COMMAND_ERROR_IS_FATAL ANY)
-    return()
-  endif(VCPKG_MANIFEST_CREATED)
-
-  set(options)
-  set(oneValueArgs NAME VERSION DIR INSTALL_DIR)
-  set(multiValueArgs)
-  cmake_parse_arguments("MANIFEST" "${options}" "${oneValueArgs}"
-                        "${multiValueArgs}" ${ARGN})
-
-  if(EXISTS "${MANIFEST_DIR}/vcpkg.json")
-    message(STATUS "Manifest file already created")
-    set(VCPKG_MANIFEST_DIR
-        ${MANIFEST_DIR}
-        CACHE STRING "manifest dir" FORCE)
-    execute_process(
-      COMMAND ${VCPKG_PATH} install
-      WORKING_DIRECTORY ${MANIFEST_DIR} COMMAND_ERROR_IS_FATAL ANY)
-    return()
-  endif(EXISTS "${MANIFEST_DIR}/vcpkg.json")
-
-  execute_process(
-    COMMAND "${VCPKG_PATH}" "new" "--name" "${MANIFEST_NAME}" "--version"
-            "${MANIFEST_VERSION}" "--x-install-root=${MANIFEST_INSTALL_DIR}"
-    WORKING_DIRECTORY "${MANIFEST_DIR}" COMMAND_ERROR_IS_FATAL ANY)
-  execute_process(
-    COMMAND "${VCPKG_PATH}" "x-update-baseline" "--add-initial-baseline"
-    WORKING_DIRECTORY "${MANIFEST_DIR}")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${VCPKG_PATH}
-                          ${CMAKE_BINARY_DIR}/vcpkg)
-  execute_process(COMMAND ${VCPKG_PATH} install
-                  WORKING_DIRECTORY ${MANIFEST_DIR} COMMAND_ERROR_IS_FATAL ANY)
-  set(VCPKG_MANIFEST_CREATED
-      true
-      CACHE BOOL "whether vcpkg is found" FORCE)
-  set(VCPKG_MANIFEST_DIR
-      ${MANIFEST_DIR}
-      CACHE STRING "manifest dir" FORCE)
-endfunction(vcpkg_create_manifest)
