@@ -66,6 +66,10 @@ local function run_after_user_event(pattern, callback)
   })
 end
 
+local function command_available(command)
+  return vim.fn.executable(command) == 1
+end
+
 local M = {
   copy_file = copy_file,
   file_exists = file_exists,
@@ -75,6 +79,7 @@ local M = {
   log_info = log_info,
   log_error = log_error,
   run_after_user_event = run_after_user_event,
+  command_available = command_available,
 }
 
 return M
