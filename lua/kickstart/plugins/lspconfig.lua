@@ -25,7 +25,13 @@ return {
             -- Load the xmake types when opening file named `xmake.lua`
             -- Needs `LelouchHe/xmake-luals-addon` to be installed
             { path = 'xmake-luals-addon/library', files = { 'xmake.lua' } },
+            { path = vim.fn.expand '~/.luarocks/share/lua/5.1' },
           },
+          enabled = function(root_dir)
+            local no_rc = not vim.uv.fs_stat(root_dir .. '/.luarc.json')
+            local is_nvim_config = root_dir == vim.fn.stdpath 'config'
+            return is_nvim_config or no_rc
+          end,
         },
       },
       { 'Bilal2453/luvit-meta', lazy = true },
@@ -74,7 +80,6 @@ return {
           local xmap = function(keys, func, desc)
             vim.keymap.set('x', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
-
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
@@ -183,6 +188,7 @@ return {
           cmd = {
             'clangd',
             '--header-insertion=never',
+            -- '--experimental-modules-support',
           },
           on_attach = function(client, bufnr)
             vim.cmd 'TSBufDisable highlight'
@@ -214,22 +220,23 @@ return {
             },
           },
         },
-        -- neocmake = {
-        --   cmd = { 'neocmakelsp', '--stdio' },
-        --   filetypes = { 'cmake' },
-        --   root_dir = function(fname)
-        --     return require('lspconfig').util.find_git_ancestor(fname)
-        --   end,
-        --   single_file_support = true, -- suggested
-        --   -- on_attach = on_attach -- on_attach is the on_attach function you defined
-        --   init_options = {
-        --     format = {
-        --       enable = true,
-        --     },
-        --     scan_cmake_in_package = true, -- default is true
-        --   },
-        -- },
-        cmake = {},
+        neocmake = {
+          cmd = { 'neocmakelsp', '--stdio' },
+          filetypes = { 'cmake' },
+          root_dir = function(fname)
+            return vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
+          end,
+          single_file_support = true, -- suggested
+          -- on_attach = on_attach -- on_attach is the on_attach function you defined
+          init_options = {
+            format = {
+              enable = true,
+            },
+            scan_cmake_in_package = true, -- default is true
+          },
+        },
+        -- cmake = {},
+        -- cmakelang = {},
       }
 
       -- Ensure the servers and tools above are installed

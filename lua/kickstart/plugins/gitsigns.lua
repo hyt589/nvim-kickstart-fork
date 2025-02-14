@@ -52,19 +52,21 @@ return {
         map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
         map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
         map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
-        map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = 'git [u]ndo stage hunk' })
         map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
-        map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
+        map('n', '<leader>hp', gitsigns.preview_hunk_inline, { desc = 'git [p]review hunk' })
         map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
         map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
-        map('n', '<leader>hn', gitsigns.next_hunk, { desc = 'git [n]ext hunk' })
-        map('n', '<leader>hp', gitsigns.prev_hunk, { desc = 'git [p]revious hunk' })
+        map('n', '<leader>hj', function()
+          gitsigns.nav_hunk 'next'
+        end, { desc = 'git [n]ext hunk' })
+        map('n', '<leader>hk', function()
+          gitsigns.nav_hunk 'prev'
+        end, { desc = 'git [p]revious hunk' })
         map('n', '<leader>hD', function()
           gitsigns.diffthis '@'
         end, { desc = 'git [D]iff against last commit' })
         -- Toggles
         map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
-        map('n', '<leader>tD', gitsigns.toggle_deleted, { desc = '[T]oggle git show [D]eleted' })
       end,
     },
   },
