@@ -111,7 +111,7 @@ end
 local _create_terminal_with_commands = function(command)
   local command_str = command.args
   local key = command.fargs[1]
-  terminal_list[key] = Terminal:new { cmd = command_str, hidden = true, direction = 'float', display_name = key, close_on_exit = false }
+  terminal_list[key] = Terminal:new { cmd = command_str, hidden = true, direction = 'float', display_name = key, close_on_exit = true }
   current_terminal = terminal_list[key]
   _toggle_current_terminal()
 end

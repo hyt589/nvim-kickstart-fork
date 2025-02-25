@@ -36,7 +36,7 @@ local PresetType = {
   Workflow = 'workflow',
 }
 
-local function select_configure_preset()
+local function select_configure_preset(fresh)
   local names = {}
   local named_presets = {}
   for _, preset in ipairs(presets.configurePresets) do
@@ -45,9 +45,9 @@ local function select_configure_preset()
   end
   vim.ui.select(names, { prompt = 'Select a configure preset' }, function(name)
     if named_presets[name]['binaryDir'] == nil then
-      vim.cmd('CreateTerminalWithCommands cmake -B build --preset ' .. name)
+      vim.cmd('CreateTerminalWithCommands cmake -B build --preset ' .. name .. fresh .. ' ; ' .. vim.o.shell)
     else
-      vim.cmd('CreateTerminalWithCommands cmake --preset ' .. name)
+      vim.cmd('CreateTerminalWithCommands cmake --preset ' .. name .. fresh .. ' ; ' .. vim.o.shell)
     end
   end)
 end
@@ -58,17 +58,17 @@ local function select_build_preset()
     table.insert(names, preset.name)
   end
   vim.ui.select(names, { prompt = 'Select a build preset' }, function(name)
-    vim.cmd('CreateTerminalWithCommands cmake --build --preset ' .. name)
+    vim.cmd('CreateTerminalWithCommands cmake --build --preset ' .. name .. ' ; ' .. vim.o.shell)
   end)
 end
 
-local function select_workflow_preset()
+local function select_workflow_preset(fresh)
   local names = {}
   for _, preset in ipairs(presets.workflowPresets) do
     table.insert(names, preset.name)
   end
   vim.ui.select(names, { prompt = 'Select a workflow preset' }, function(name)
-    vim.cmd('CreateTerminalWithCommands cmake --workflow --preset ' .. name)
+    vim.cmd('CreateTerminalWithCommands cmake --workflow --preset ' .. name .. fresh .. ' ; ' .. vim.o.shell)
   end)
 end
 
@@ -82,12 +82,17 @@ vim.api.nvim_create_user_command('CMakePreset', function()
     PresetType.Build,
     PresetType.Workflow,
   }, { prompt = 'Select a type of preset you would like to run' }, function(type)
-    if type == PresetType.Configuration then
-      select_configure_preset()
+    if type ~= PresetType.Build then
+      vim.ui.select({ 'yes', 'no' }, { prompt = 'Would you like to start a fresh run (ignoring cache variables)?' }, function(choice)
+        local fresh = (choice == 'yes') and ' --fresh ' or ''
+        if type == PresetType.Configuration then
+          select_configure_preset(fresh)
+        elseif type == PresetType.Workflow then
+          select_workflow_preset(fresh)
+        end
+      end)
     elseif type == PresetType.Build then
       select_build_preset()
-    elseif type == PresetType.Workflow then
-      select_workflow_preset()
     end
   end)
 end, {})
