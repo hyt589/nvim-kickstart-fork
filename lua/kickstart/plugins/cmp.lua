@@ -106,6 +106,7 @@ return {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'luasnip_choice' },
         },
         formatting = {
           format = function(_, vim_item)
