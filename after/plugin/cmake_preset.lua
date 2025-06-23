@@ -3,9 +3,21 @@ local is_windows = require('common.os').is_windows
 local slash = is_windows and '\\' or '/'
 
 local presets = nil
+local user_presets = nil
 
 local function read_cmake_preset_json()
   local json_path = vim.fn.getcwd() .. slash .. 'CMakePresets.json'
+  local file = io.open(json_path, 'rb')
+  if not file then
+    return nil
+  end
+  local json = vim.fn.json_decode(file:read '*a')
+  file:close()
+  return json
+end
+
+local function read_cmake_user_preset_json()
+  local json_path = vim.fn.getcwd() .. slash .. 'CMakeUserPresets.json'
   local file = io.open(json_path, 'rb')
   if not file then
     return nil
@@ -19,6 +31,7 @@ vim.api.nvim_create_autocmd({ 'DirChanged', 'VimEnter' }, {
   pattern = '*',
   callback = function()
     presets = read_cmake_preset_json()
+    user_presets = read_cmake_user_preset_json()
   end,
 })
 
@@ -27,6 +40,14 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
   callback = function()
     utils.log_info 'Presets changed. Reloading...'
     presets = read_cmake_preset_json()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+  pattern = 'CMakeUserPresets.json',
+  callback = function()
+    utils.log_info 'User Presets changed. Reloading...'
+    user_presets = read_cmake_user_preset_json()
   end,
 })
 
@@ -39,9 +60,17 @@ local PresetType = {
 local function select_configure_preset(fresh)
   local names = {}
   local named_presets = {}
-  for _, preset in ipairs(presets.configurePresets) do
-    table.insert(names, preset.name)
-    named_presets[preset.name] = preset
+  if presets ~= nil and presets.configurePresets ~= nil then
+    for _, preset in ipairs(presets.configurePresets) do
+      table.insert(names, preset.name)
+      named_presets[preset.name] = preset
+    end
+  end
+  if user_presets ~= nil and user_presets.configurePresets ~= nil then
+    for _, preset in ipairs(user_presets.configurePresets) do
+      table.insert(names, preset.name)
+      named_presets[preset.name] = preset
+    end
   end
   vim.ui.select(names, { prompt = 'Select a configure preset' }, function(name)
     if named_presets[name]['binaryDir'] == nil then
@@ -54,8 +83,15 @@ end
 
 local function select_build_preset()
   local names = {}
-  for _, preset in ipairs(presets.buildPresets) do
-    table.insert(names, preset.name)
+  if presets ~= nil and presets.buildPresets ~= nil then
+    for _, preset in ipairs(presets.buildPresets) do
+      table.insert(names, preset.name)
+    end
+  end
+  if user_presets ~= nil and user_presets.buildPresets then
+    for _, preset in ipairs(user_presets.buildPresets) do
+      table.insert(names, preset.name)
+    end
   end
   vim.ui.select(names, { prompt = 'Select a build preset' }, function(name)
     vim.cmd('CreateTerminalWithCommands cmake --build --preset ' .. name .. ' ; ' .. vim.o.shell)
@@ -64,8 +100,15 @@ end
 
 local function select_workflow_preset(fresh)
   local names = {}
-  for _, preset in ipairs(presets.workflowPresets) do
-    table.insert(names, preset.name)
+  if presets ~= nil and presets.workflowPresets ~= nil then
+    for _, preset in ipairs(presets.workflowPresets) do
+      table.insert(names, preset.name)
+    end
+  end
+  if user_presets ~= nil and user_presets.workflowPresets ~= nil then
+    for _, preset in ipairs(user_presets.workflowPresets) do
+      table.insert(names, preset.name)
+    end
   end
   vim.ui.select(names, { prompt = 'Select a workflow preset' }, function(name)
     vim.cmd('CreateTerminalWithCommands cmake --workflow --preset ' .. name .. fresh .. ' ; ' .. vim.o.shell)

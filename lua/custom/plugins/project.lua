@@ -30,7 +30,7 @@ return {
 
         -- All the patterns used to detect root dir, when **"pattern"** is in
         -- detection_methods
-        patterns = { '!../git', 'compile_commands.json', 'build/compile_commands.json', '^.config/nvim' },
+        patterns = { '!=build', '!../git', 'compile_commands.json', 'build/compile_commands.json', '^.config/nvim' },
 
         load_telescope_extension(),
         vim.keymap.set('n', '<leader>ps', function()

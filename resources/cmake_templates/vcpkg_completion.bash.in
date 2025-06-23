@@ -1,6 +1,6 @@
 #/usr/bin/env bash
 
-export VCPKG_ROOT=@vcpkg_SOURCE_DIR@
+export VCPKG_ROOT=$(readlink -f @vcpkg_SOURCE_DIR@)
 export PATH=@CMAKE_BINARY_DIR@:$PATH
 
 _vcpkg_completions()

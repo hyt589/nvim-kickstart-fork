@@ -109,6 +109,35 @@ local snippets = {
       return args[1][1]
     end, { 1 }, {}), i(2, 'd'), i(1, 'value') })
   ),
+  s('loop_unroll', {
+    t '[&] ',
+    i(1, '__device__'),
+    t '<size_t ...',
+    i(2, 'I'),
+    t '> (std::index_sequence<',
+    f(
+      function(args, parent, user_args)
+        return args[1][1]
+      end, -- callback (args, parent, user_args) -> string
+      { 2 }, -- node indice(s) whose text is passed to fn, i.e. i(2)
+      {} -- opts
+    ),
+    t {'...>){', "  "},
+    t '([&]',
+    f(
+      function(args, parent, user_args)
+        return args[1][1]
+      end, -- callback (args, parent, user_args) -> string
+      { 1 }, -- node indice(s) whose text is passed to fn, i.e. i(2)
+      {} -- opts
+    ),
+    t ({'(){', '    '}),
+    i(4, 'loop_body'),
+    t {"", "}(), ...);"},
+    t {"", '}(std::make_index_sequence<'},
+    i(3, 'range'),
+    t '>());',
+  }),
 }
 
 ls.add_snippets('cpp', snippets)
