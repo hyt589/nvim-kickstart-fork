@@ -28,49 +28,49 @@ end
 local _terminal_finder = function(opts)
   opts = opts or {}
   pickers
-    .new(opts, {
-      prompt_title = 'Terminal Finder',
-      finder = finders.new_table {
-        results = getKeysAsString(terminal_list),
-      },
-      sorter = conf.generic_sorter(opts),
-      attach_mappings = function(prompt_bufnr, _)
-        actions.select_default:replace(function()
-          actions.close(prompt_bufnr)
-          local selection = action_state.get_selected_entry()
-          current_terminal = terminal_list[selection[1]]
-          _toggle_current_terminal()
-        end)
-        return true
-      end,
-    })
-    :find()
+      .new(opts, {
+        prompt_title = 'Terminal Finder',
+        finder = finders.new_table {
+          results = getKeysAsString(terminal_list),
+        },
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr, _)
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+            current_terminal = terminal_list[selection[1]]
+            _toggle_current_terminal()
+          end)
+          return true
+        end,
+      })
+      :find()
 end
 
 local _terminal_remover = function(opts)
   opts = opts or {}
   pickers
-    .new(opts, {
-      prompt_title = 'Terminal Remover',
-      finder = finders.new_table {
-        results = getKeysAsString(terminal_list),
-      },
-      sorter = conf.generic_sorter(opts),
-      attach_mappings = function(prompt_bufnr, _)
-        actions.select_default:replace(function()
-          actions.close(prompt_bufnr)
-          local selection = action_state.get_selected_entry()
-          if selection[1] ~= 'default' then
-            if current_terminal == terminal_list[selection[1]] then
-              current_terminal = terminal_list.default
+      .new(opts, {
+        prompt_title = 'Terminal Remover',
+        finder = finders.new_table {
+          results = getKeysAsString(terminal_list),
+        },
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr, _)
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+            if selection[1] ~= 'default' then
+              if current_terminal == terminal_list[selection[1]] then
+                current_terminal = terminal_list.default
+              end
+              terminal_list[selection[1]] = nil
             end
-            terminal_list[selection[1]] = nil
-          end
-        end)
-        return true
-      end,
-    })
-    :find()
+          end)
+          return true
+        end,
+      })
+      :find()
 end
 
 local _compute_name = function(table, basename, postfix_base)
@@ -91,12 +91,12 @@ local _create_terminal = function()
     end
     if terminal_list[command] ~= nil then
       local terminal_name = _compute_name(terminal_list, command, 'duplicate')
-      terminal_list[terminal_name] = Terminal:new { cmd = command, hidden = true, direction = 'float', display_name = terminal_name }
+      terminal_list[terminal_name] = Terminal:new { cmd = command, hidden = true, direction = 'float', display_name = terminal_name, float_opts = { border = "rounded" } }
       current_terminal = terminal_list[terminal_name]
       _toggle_current_terminal()
       return
     end
-    terminal_list[command] = Terminal:new { cmd = command, hidden = true, direction = 'float', display_name = command }
+    terminal_list[command] = Terminal:new { cmd = command, hidden = true, direction = 'float', display_name = command, float_opts = { border = "rounded" } }
     current_terminal = terminal_list[command]
     _toggle_current_terminal()
   end)

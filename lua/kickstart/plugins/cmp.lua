@@ -107,6 +107,7 @@ return {
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'luasnip_choice' },
+          { name = 'buffer' },
         },
         formatting = {
           format = function(_, vim_item)
